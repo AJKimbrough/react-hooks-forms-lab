@@ -1,17 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
 
-function ItemForm(props) {
+function ItemForm({ addItem }) {
+  const [name, setName] = useState("")
+  const [category, setCategory] = useState("Produce")
+
+  function handleName(event) {
+    setName(event.target.value)
+  }
+
+  function handleCategory(event) {
+    setCategory(event.target.value)
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault()
+    const newItem = {
+      id: uuid(),
+      name,
+      category
+    };
+    addItem(newItem)
+  }
+
+
   return (
-    <form className="NewItem">
+    <form onSubmit={handleSubmit} className="NewItem">
       <label>
         Name:
-        <input type="text" name="name" />
+        <input value= {name} type="text" name="name" onChange={handleName} />
       </label>
 
       <label>
         Category:
-        <select name="category">
+        <select value={category} name="category" onChange={handleCategory} >
           <option value="Produce">Produce</option>
           <option value="Dairy">Dairy</option>
           <option value="Dessert">Dessert</option>
