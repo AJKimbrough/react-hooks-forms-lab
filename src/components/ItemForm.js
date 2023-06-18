@@ -1,9 +1,29 @@
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
 
-function ItemForm({ addItem }) {
+function ItemForm({ onItemFormSubmit }) {
   const [name, setName] = useState("")
-  const [category, setCategory] = useState("Produce")
+  const [categorySelection, setCategorySelection] = useState("Produce")
+  const [addItem, setAddItem] = useState([])
+
+  function onChangeCategory(event) {
+    setCategorySelection(event.target.value)
+  }
+
+  function onAddItem(e) {
+    setAddItem(e.target.value)
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault()
+    const newItem = {
+      id:uuid(),
+      name:addItem,
+      category:categorySelection,
+    }
+    console.log("this is new item",newItem)
+    onItemFormSubmit(newItem)
+  }
 
   function handleName(event) {
     setName(event.target.value)
@@ -13,27 +33,19 @@ function ItemForm({ addItem }) {
     setCategory(event.target.value)
   }
 
-  function handleSubmit(event) {
-    event.preventDefault()
-    const newItem = {
-      id: uuid(),
-      name,
-      category
-    };
-    addItem(newItem)
-  }
+  
 
 
   return (
     <form onSubmit={handleSubmit} className="NewItem">
       <label>
         Name:
-        <input value= {name} type="text" name="name" onChange={handleName} />
+        <input value= {addItem} type="text" name="name" onChange={onAddItem} />
       </label>
 
       <label>
         Category:
-        <select value={category} name="category" onChange={handleCategory} >
+        <select name="category" onChange={onChangeCategory} >
           <option value="Produce">Produce</option>
           <option value="Dairy">Dairy</option>
           <option value="Dessert">Dessert</option>
